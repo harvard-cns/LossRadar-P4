@@ -1,0 +1,71 @@
+set_switch s1
+
+table_set_default send_frame _drop
+table_set_default forward _drop
+table_set_default ipv4_lpm _drop
+table_set_default add_loss_radar_hdr_table _no_op
+table_set_default remove_loss_radar_hdr_table _no_op
+table_set_default loss_radar_calc_hash_table loss_radar_calc_hash
+table_set_default loss_radar_um_table _no_op
+table_set_default loss_radar_dm_table _no_op
+
+table_add send_frame rewrite_mac 1 => 00:aa:bb:00:00:01
+table_add send_frame rewrite_mac 2 => 00:aa:bb:00:00:02
+table_add send_frame rewrite_mac 3 => 00:aa:bb:00:00:03
+
+table_add forward set_dmac 10.0.1.10 => 00:04:00:00:00:01
+table_add forward set_dmac 10.0.2.10 => 00:04:00:00:00:02
+table_add forward set_dmac 10.0.3.10 => 00:04:00:00:00:03
+table_add forward set_dmac 10.0.4.10 => 00:04:00:00:00:04
+
+table_add ipv4_lpm set_nhop 10.0.1.10/24 => 10.0.1.10 1
+table_add ipv4_lpm set_nhop 10.0.2.10/24 => 10.0.2.10 2
+table_add ipv4_lpm set_nhop 10.0.3.10/24 => 10.0.3.10 3
+table_add ipv4_lpm set_nhop 10.0.4.10/24 => 10.0.4.10 3
+
+table_add add_loss_radar_hdr_table add_lossradar_hdr 6 => 
+#table_add add_loss_radar_hdr_table add_lossradar_hdr 17 => 
+table_add add_loss_radar_hdr_table add_lossradar_hdr 1 => 
+
+table_add remove_loss_radar_hdr_table remove_lossradar_hdr 1 252 => 
+table_add remove_loss_radar_hdr_table remove_lossradar_hdr 2 252 => 
+
+table_add loss_radar_um_table loss_radar_um 1 252 0 =>
+
+table_add loss_radar_dm_table loss_radar_dm 1 252 =>
+
+set_switch s2
+
+table_set_default send_frame _drop
+table_set_default forward _drop
+table_set_default ipv4_lpm _drop
+table_set_default add_loss_radar_hdr_table _no_op
+table_set_default remove_loss_radar_hdr_table _no_op
+table_set_default loss_radar_calc_hash_table loss_radar_calc_hash
+table_set_default loss_radar_um_table _no_op
+table_set_default loss_radar_dm_table _no_op
+
+table_add send_frame rewrite_mac 1 => 00:aa:bb:00:00:01
+table_add send_frame rewrite_mac 2 => 00:aa:bb:00:00:02
+table_add send_frame rewrite_mac 3 => 00:aa:bb:00:00:03
+
+table_add forward set_dmac 10.0.1.10 => 00:04:00:00:00:01
+table_add forward set_dmac 10.0.2.10 => 00:04:00:00:00:02
+table_add forward set_dmac 10.0.3.10 => 00:04:00:00:00:03
+table_add forward set_dmac 10.0.4.10 => 00:04:00:00:00:04
+
+table_add ipv4_lpm set_nhop 10.0.1.10/24 => 10.0.1.10 3
+table_add ipv4_lpm set_nhop 10.0.2.10/24 => 10.0.2.10 3
+table_add ipv4_lpm set_nhop 10.0.3.10/24 => 10.0.3.10 1
+table_add ipv4_lpm set_nhop 10.0.4.10/24 => 10.0.4.10 2
+
+table_add add_loss_radar_hdr_table add_lossradar_hdr 6 => 
+#table_add add_loss_radar_hdr_table add_lossradar_hdr 17 => 
+table_add add_loss_radar_hdr_table add_lossradar_hdr 1 => 
+
+table_add remove_loss_radar_hdr_table remove_lossradar_hdr 1 252 => 
+table_add remove_loss_radar_hdr_table remove_lossradar_hdr 2 252 => 
+
+table_add loss_radar_um_table loss_radar_um 1 252 0 =>
+
+table_add loss_radar_dm_table loss_radar_dm 1 252 =>
