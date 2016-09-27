@@ -6,5 +6,5 @@ LossRadar p4 code
 A working modification to simple_switch.cpp is show in simple_switch_target/simple_switch.cpp.
 All modifications are within:
 
-	\#if LOSSRADAR_ENABLE
-	\#endif
+	#if LOSSRADAR_ENABLE
+	#endif
